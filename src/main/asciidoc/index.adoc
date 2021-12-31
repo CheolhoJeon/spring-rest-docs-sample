@@ -1,34 +1,42 @@
-= Getting Started With Spring REST Docs
+= 📄 REST API Reference
+Cheolho Jeon <woung2770@gmail.com>
+:toc:
 
-This is an example output for a service running at http://localhost:8080:
+== Introduction
 
-== Register
-//operation::books/register[]
-operation::books/register[snippets='http-request,request-fields,http-response,response-fields-data']
+본 문서는 시스템에서 제공하는 전체 REST API에 대해 기술합니다. 각 API는 아래의 세부 목차로 구성되어 있습니다.
 
-== FindAll
-//operation::books/findAll[snippets='http-request,http-response']
-operation::books/findAll[]
+[horizontal]
+HTTP Request*:: 요청 메시지 전체를 기술
+Path Parameter:: 요청 메시지의 경로 변수를 기술
+Request Fields:: 요청 메시지의 페이로드에 포함될 수 있는 JSON 프로퍼티를 기술
+HTTP Response*:: 응답 메시지 전체를 기술
+Response Fields*:: 응답 메시지의 페이로드에 포함될 수 있는 JSON 프로퍼티를 기술
 
-== FindById
-operation::books/findById[]
+TIP: **'*'**는 필수적으로 포함되는 항목입니다.
 
-//.request
-//include::{snippets}/books/findAll/http-request.adoc[]
-//
-//.response
-//include::{snippets}/books/findAll/http-response.adoc[]
-//
-//.field description
-//include::{snippets}/books/findAll/response-fields.adoc[]
-//
-//.request
-//include::{snippets}/books/findById/http-request.adoc[]
-//
-//.response
-//include::{snippets}/books/findById/http-response.adoc[]
-//
-//.field description
-//include::{snippets}/books/findById/response-fields.adoc[]
+== REST APIs
 
-As you can see the format is very simple, and in fact you always get the same message.
+=== Books
+
+****
+[discrete]
+==== **[POST] /api/books**
+
+operation::books/register[snippets='curl-request,http-request,request-fields,http-response,response-fields-data']
+****
+
+****
+[discrete]
+==== **[GET] /api/books**
+operation::books/findAll[snippets='curl-request,http-request,request-parameters,http-response,response-fields-data']
+****
+
+****
+[discrete]
+==== **[GET] /api/books/{id}**
+operation::books/findById[snippets='curl-request,http-request,path-parameters,http-response,response-fields-data']
+****
+
+=== ....
+

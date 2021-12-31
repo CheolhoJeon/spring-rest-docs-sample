@@ -40,17 +40,14 @@ ext {
 
 test {
     useJUnitPlatform()
-//    outputs.dir snippetsDir
 }
 
 asciidoctor {
+    dependsOn test
     configurations 'asciidoctorExt'
     sourceDir 'src/main/asciidoc'
-    outputDir  = file('build/docs/')
-//    attributes 'snippets': file('target/snippets')
+    outputDir 'build/docs/'
     attributes 'snippets': snippetsDir
-//    inputs.dir snippetsDir
-    dependsOn test
 }
 
 bootJar {

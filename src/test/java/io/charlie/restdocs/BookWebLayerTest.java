@@ -28,8 +28,6 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
-import static org.springframework.restdocs.snippet.Attributes.attributes;
-import static org.springframework.restdocs.snippet.Attributes.key;
 import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.document;
 import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.documentationConfiguration;
 
@@ -37,114 +35,113 @@ import static org.springframework.restdocs.webtestclient.WebTestClientRestDocume
 @ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
 public class BookWebLayerTest {
 
-  @Autowired
-  private MockMvc mockMvc;
+    @Autowired
+    private MockMvc mockMvc;
 
-  private WebTestClient webTestClient;
+    private WebTestClient webTestClient;
 
-  private final FieldDescriptor[] bookResponseFieldSnippet = new FieldDescriptor[]{
-      fieldWithPath("id").description("ID description"),
-      fieldWithPath("title").description("Title description"),
-      fieldWithPath("author").description("Author description"),
-      fieldWithPath("price").description("Price description"),
-      fieldWithPath("description").description("Description description").optional()
-  };
+    private final FieldDescriptor[] bookResponseFieldSnippet = new FieldDescriptor[]{
+            fieldWithPath("id").description("ID description"),
+            fieldWithPath("title").description("Title description"),
+            fieldWithPath("author").description("Author description"),
+            fieldWithPath("price").description("Price description"),
+            fieldWithPath("description").description("Description description").optional()
+    };
 
-  @BeforeEach
-  public void setUp(RestDocumentationContextProvider restDocumentation) {
-    this.webTestClient = MockMvcWebTestClient
-        .bindTo(mockMvc)
-        .baseUrl("https://api.charlie.io")
-        .filter(
-            documentationConfiguration(restDocumentation)
-                .operationPreprocessors()
-                .withRequestDefaults(prettyPrint())
-                .withResponseDefaults(prettyPrint()))
-        .build();
-  }
+    @BeforeEach
+    public void setUp(RestDocumentationContextProvider restDocumentation) {
+        this.webTestClient = MockMvcWebTestClient
+                .bindTo(mockMvc)
+                .baseUrl("https://api.charlie.io")
+                .filter(
+                        documentationConfiguration(restDocumentation)
+                                .operationPreprocessors()
+                                .withRequestDefaults(prettyPrint())
+                                .withResponseDefaults(prettyPrint()))
+                .build();
+    }
 
-  @Test
-  public void registerTest() {
-    this.webTestClient
-        .post()
-        .uri("/books")
-        .bodyValue(new BookRequestDto.Register("자료구조", "세종", 18000L, "세종대왕의 자료구조 교재"))
-        .exchange()
-        .expectStatus().isEqualTo(CREATED)
-        .expectBody(new ParameterizedTypeReference<HttpResponseBody<BookResponseDto.Register>>() {
-        })
-        .consumeWith(response -> {
-          HttpResponseBody<BookResponseDto.Register> responseBody = response.getResponseBody();
-          // Assertions...
-        })
-        .consumeWith(
-            document(
-                "books/register",
-                requestFields(
-                    attributes(key("title").value("Request Fields")),
-                    fieldWithPath("title").description("title description"),
-                    fieldWithPath("author").description("author description"),
-                    fieldWithPath("price").description("price description"),
-                    fieldWithPath("description").description("description description").optional()
-                ),
-                responseFields(
-                    beneathPath("data").withSubsectionId("data"),
-                    fieldWithPath("id").description("id description")
-                )
-            )
-        );
-  }
+    @Test
+    public void registerTest() {
+        this.webTestClient
+                .post()
+                .uri("/books")
+                .bodyValue(new BookRequestDto.Register("자료구조", "세종", 18000L, "세종대왕의 자료구조 교재"))
+                .exchange()
+                .expectStatus().isEqualTo(CREATED)
+                .expectBody(new ParameterizedTypeReference<HttpResponseBody<BookResponseDto.Register>>() {
+                })
+                .consumeWith(response -> {
+                    HttpResponseBody<BookResponseDto.Register> responseBody = response.getResponseBody();
+                    // Assertions...
+                })
+                .consumeWith(
+                        document(
+                                "books/register",
+                                requestFields(
+                                        fieldWithPath("title").description("Title description"),
+                                        fieldWithPath("author").description("Author description"),
+                                        fieldWithPath("price").description("Price description"),
+                                        fieldWithPath("description").description("Description description").optional()
+                                ),
+                                responseFields(
+                                        beneathPath("data").withSubsectionId("data"),
+                                        fieldWithPath("id").description("Id description")
+                                )
+                        )
+                );
+    }
 
-  @Test
-  public void findAllTest() {
-    this.webTestClient
-        .get()
-        .uri("/books")
-        .exchange()
-        .expectStatus().isEqualTo(OK)
-        .expectBody(new ParameterizedTypeReference<HttpResponseBody<List<BookResponseDto.Find>>>() {
-        })
-        .consumeWith(response -> {
-          HttpResponseBody<List<BookResponseDto.Find>> responseBody = response.getResponseBody();
-          // Assertions...
-        })
-        .consumeWith(
-            document(
-                "books/findAll",
-                responseFields(
-                    beneathPath("data").withSubsectionId("data"),
-                    bookResponseFieldSnippet
-                )
-            )
-        );
-  }
+    @Test
+    public void findAllTest() {
+        this.webTestClient
+                .get()
+                .uri("/books")
+                .exchange()
+                .expectStatus().isEqualTo(OK)
+                .expectBody(new ParameterizedTypeReference<HttpResponseBody<List<BookResponseDto.Find>>>() {
+                })
+                .consumeWith(response -> {
+                    HttpResponseBody<List<BookResponseDto.Find>> responseBody = response.getResponseBody();
+                    // Assertions...
+                })
+                .consumeWith(
+                        document(
+                                "books/findAll",
+                                responseFields(
+                                        beneathPath("data").withSubsectionId("data"),
+                                        bookResponseFieldSnippet
+                                )
+                        )
+                );
+    }
 
-  @Test
-  public void findByIdTest() {
-    this.webTestClient
-        .get()
-        .uri("/books/{id}", 1)
-        .accept(APPLICATION_JSON)
-        .exchange()
-        .expectStatus().isEqualTo(OK)
-        .expectBody(new ParameterizedTypeReference<HttpResponseBody<BookResponseDto.Find>>() {
-        })
-        .consumeWith(response -> {
-          HttpResponseBody<BookResponseDto.Find> responseBody = response.getResponseBody();
-          // Assertions...
-        })
-        .consumeWith(
-            document(
-                "books/findById",
-                responseFields(
-                    beneathPath("data").withSubsectionId("data"),
-                    bookResponseFieldSnippet
-                ),
-                pathParameters(
-                    parameterWithName("id").description("도서의 식별자")
-                )
-            )
-        );
-  }
+    @Test
+    public void findByIdTest() {
+        this.webTestClient
+                .get()
+                .uri("/books/{id}", 1)
+                .accept(APPLICATION_JSON)
+                .exchange()
+                .expectStatus().isEqualTo(OK)
+                .expectBody(new ParameterizedTypeReference<HttpResponseBody<BookResponseDto.Find>>() {
+                })
+                .consumeWith(response -> {
+                    HttpResponseBody<BookResponseDto.Find> responseBody = response.getResponseBody();
+                    // Assertions...
+                })
+                .consumeWith(
+                        document(
+                                "books/findById",
+                                responseFields(
+                                        beneathPath("data").withSubsectionId("data"),
+                                        bookResponseFieldSnippet
+                                ),
+                                pathParameters(
+                                        parameterWithName("id").description("도서의 식별자")
+                                )
+                        )
+                );
+    }
 
 }

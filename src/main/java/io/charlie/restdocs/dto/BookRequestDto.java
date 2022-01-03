@@ -6,15 +6,15 @@ import lombok.NoArgsConstructor;
 
 public interface BookRequestDto {
 
-  @Data
-  @AllArgsConstructor
-  @NoArgsConstructor
-  class Register {
-    private String title;
-    private String author;
-    private Long price;
-    private String description;
-  }
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    class Register {
+        private String title;
+        private String author;
+        private Long price;
+        private String description;
+    }
 
 }
 

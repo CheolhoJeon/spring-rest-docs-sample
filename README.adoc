@@ -1,7 +1,7 @@
-:revision: 2021.51.0
+:revision: 2022.01.0
 :icons: font
 :main-title: Spring REST Docs Sample 📄
-:description: Spring REST Docs에 대한 샘플 예제를 관리하는 리포지터리입니다 👍👍
+:description: `Spring REST Docs`에 대한 샘플 예제를 관리하는 리포지터리입니다 👍👍
 :git_service: https://github.com/CheolhoJeon/
 :project_name: spring-rest-docs-sample
 :project_license: Copyright
